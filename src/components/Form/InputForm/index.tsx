@@ -12,18 +12,18 @@ interface Props extends TextInputProps {
   error: string;
 }
 
-export function InputForm({
-  control,
+export function InputForm({ 
+  control, 
   name,
   error,
   ...rest
-}: Props){
-  return(
+}: Props) {
+  return (
     <Container>
       <Controller
         control={control}
         render={({ field: { onChange, value }}) => (
-          <Input
+          <Input 
             onChangeText={onChange}
             value={value}
             {...rest}
@@ -31,7 +31,7 @@ export function InputForm({
         )}
         name={name}
       />
-      {error && <Error>{ error }</Error>}
+      {error && <Error>{error}</Error>}
     </Container>
   );
 }

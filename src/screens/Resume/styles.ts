@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { BorderlessButton } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons'; 
 
 export const Container = styled.View`
   flex: 1;
@@ -16,15 +16,15 @@ export const Header = styled.View`
 
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: 19px;
+  padding-bottom: 20px;
 `;
 
 export const Title = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
+
   color: ${({ theme }) => theme.colors.shape};
 `;
-
 
 export const Content = styled.ScrollView``;
 
@@ -50,10 +50,9 @@ export const MonthSelectIcon = styled(Feather)`
 `;
 
 export const Month = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
 `;
-
 
 export const LoadContainer = styled.View`
   flex: 1;

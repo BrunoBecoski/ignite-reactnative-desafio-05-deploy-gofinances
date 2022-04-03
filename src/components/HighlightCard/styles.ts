@@ -7,15 +7,20 @@ interface TypeProps {
 }
 
 export const Container = styled.View<TypeProps>`
-  background-color: ${({ theme, type }) =>
-  type === 'total' ? theme.colors.secondary :  theme.colors.shape};
+  background-color: ${({ theme, type }) => 
+    type === 'total' ? theme.colors.secondary : theme.colors.shape
+  };
 
   width: ${RFValue(300)}px;
   border-radius: 5px;
 
-  padding: 19px 23px;
+  padding: 18px 24px;
   padding-bottom: ${RFValue(42)}px;
-  margin-right: 16px;
+
+  ${({ type }) => type === 'down' && css`
+    margin-right: 16px;
+    margin-left: 16px;
+  `};
 `;
 
 export const Header = styled.View`
@@ -24,11 +29,12 @@ export const Header = styled.View`
 `;
 
 export const Title = styled.Text<TypeProps>`
-  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(14)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
 
-  color: ${({ theme, type }) =>
-  type === 'total' ? theme.colors.shape :  theme.colors.text_dark};
+  color: ${({ theme, type }) => 
+    type === 'total' ? theme.colors.shape : theme.colors.title
+  };
 `;
 
 export const Icon = styled(Feather)<TypeProps>`
@@ -50,19 +56,21 @@ export const Icon = styled(Feather)<TypeProps>`
 export const Footer = styled.View``;
 
 export const Amount = styled.Text<TypeProps>`
-  font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(32)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
 
-  color: ${({ theme, type }) =>
-  type === 'total' ? theme.colors.shape :  theme.colors.text_dark};
+  color: ${({ theme, type }) => 
+    type === 'total' ? theme.colors.shape : theme.colors.title
+  };
 
   margin-top: 38px;
 `;
 
 export const LastTransaction = styled.Text<TypeProps>`
-  font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(12)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
 
-  color: ${({ theme, type }) =>
-  type === 'total' ? theme.colors.shape :  theme.colors.text};
+  color: ${({ theme, type }) => 
+    type === 'total' ? theme.colors.shape : theme.colors.text
+  };
 `;

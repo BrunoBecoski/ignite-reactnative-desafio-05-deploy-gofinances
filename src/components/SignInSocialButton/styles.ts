@@ -25,9 +25,11 @@ export const ImageContainer = styled.View`
 `;
 
 export const Text = styled.Text`
+  font-size: ${RFValue(14)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
+
+  color: ${({ theme }) => theme.colors.title};
+
   flex: 1;
   text-align: center;
-
-  font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: ${RFValue(14)}px;
 `;

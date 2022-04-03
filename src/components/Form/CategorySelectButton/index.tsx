@@ -1,9 +1,10 @@
 import React from 'react';
 
-import {
+import { 
   Container,
   Category,
-  Icon,
+  Icon
+
 } from './styles';
 
 interface Props {
@@ -11,10 +12,10 @@ interface Props {
   onPress: () => void;
 }
 
-export function CategorySelectButton({
-  title,
-  onPress
-}: Props){
+export function CategorySelectButton({ 
+  title, 
+  onPress 
+}: Props) {
   return(
     <Container onPress={onPress}>
       <Category>{title}</Category>

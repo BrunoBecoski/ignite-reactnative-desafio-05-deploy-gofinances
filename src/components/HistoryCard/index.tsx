@@ -3,24 +3,25 @@ import React from 'react';
 import {
   Container,
   Title,
-  Amount,
+  Amount
 } from './styles';
 
 interface Props {
+  color: string;
   title: string;
   amount: string;
-  color: string;
 }
 
 export function HistoryCard({
+  color,
   title,
-  amount,
-  color
-}: Props){
-  return(
+  amount
+ }: Props) {
+  return (
     <Container color={color}>
       <Title>{title}</Title>
       <Amount>{amount}</Amount>
+
     </Container>
-  );
+  )
 }

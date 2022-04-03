@@ -11,6 +11,7 @@ const { REDIRECT_URI } = process.env;
 
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AuthProviderProps {
@@ -24,27 +25,28 @@ interface User {
   photo?: string;
 }
 
-interface IAuthContextData {
+interface AuthContextData {
   user: User;
   signInWithGoogle(): Promise<void>;
   signInWithApple(): Promise<void>;
+  signOut(): Promise<void>;
+  userStorageLoading: boolean;
 }
 
 interface AuthorizationResponse {
   params: {
     access_token: string;
-  };
+  },
   type: string;
 }
 
-const AuthContext = createContext({} as IAuthContextData);
+const AuthContext = createContext({} as AuthContextData);
 
-function AuthProvider({ children }: AuthProviderProps ) {
+function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
   const [userStorageLoading, setUserStorageLoading] = useState(true);
 
   const userStorageKey = '@gofinances:user';
-
 
   async function signInWithGoogle() {
     try {
@@ -54,12 +56,12 @@ function AuthProvider({ children }: AuthProviderProps ) {
       const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
 
       const { type, params } = await AuthSession
-        .startAsync({ authUrl }) as AuthorizationResponse;
+      .startAsync({ authUrl }) as AuthorizationResponse;
       
-      if (type === 'success') {
+      if(type === 'success') { 
         const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
         const userInfo = await response.json();
-        
+
         const userLogged = {
           id: userInfo.id,
           email: userInfo.email,
@@ -70,7 +72,7 @@ function AuthProvider({ children }: AuthProviderProps ) {
         setUser(userLogged);
         await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
       }
-    } catch (error) {
+    } catch(error: any) {
       throw new Error(error);
     }
   }
@@ -80,59 +82,65 @@ function AuthProvider({ children }: AuthProviderProps ) {
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ]
+          AppleAuthentication.AppleAuthenticationScope.EMAIL
+        ]  
       });
 
-      if (credential) {
+      if(credential) {
+        const name = credential.fullName!.givenName!;
+        const photo = `https://ui-avatars.com/api/?name=${name}&length=1`;
+
         const userLogged = {
           id: String(credential.user),
           email: credential.email!,
-          name: credential.fullName!.givenName!,
-          photo: undefined
+          name,
+          photo
         };
-
+        
         setUser(userLogged);
         await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error);
     }
   }
 
+  async function signOut() {
+    setUser({} as User);
+    AsyncStorage.removeItem(userStorageKey);
+  }
+
   useEffect(() => {
-    async function loadUserStorageDate() {
-      const userStoraged = await AsyncStorage.getItem('@gofinances:user');
+    async function loadUserStorageData() {
+      const userStoraged = await AsyncStorage.getItem(userStorageKey);
       
-      if(userStoraged){
+      if(userStoraged) {
         const userLogged = JSON.parse(userStoraged) as User;
         setUser(userLogged);
       }
-
       setUserStorageLoading(false);
     }
 
-    loadUserStorageDate();
-  },[]);
-  
+    loadUserStorageData();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{
+    <AuthContext.Provider value={{ 
       user,
       signInWithGoogle,
-      signInWithApple
+      signInWithApple,
+      signOut,
+      userStorageLoading
     }}>
-      {children}
+      { children }
     </AuthContext.Provider>
-  )
-}
-
+  );
+} 
 
 function useAuth() {
-  const context= useContext(AuthContext);
+  const context = useContext(AuthContext);
 
   return context;
 }
-
 
 export { AuthProvider, useAuth }

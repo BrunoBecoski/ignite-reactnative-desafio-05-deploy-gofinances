@@ -4,52 +4,54 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+const { Navigator, Screen } = createBottomTabNavigator();
+
 import { Dashboard } from '../screens/Dashboard';
 import { Register } from '../screens/Register';
 import { Resume } from '../screens/Resume';
 
-const { Navigator, Screen } = createBottomTabNavigator();
-
-export function AppRoutes(){
+export function AppRoutes() {
   const theme = useTheme();
 
-  return(
+  return (
     <Navigator
-      tabBarOptions={{
-        activeTintColor: theme.colors.secondary,
-        inactiveTintColor: theme.colors.text,
-        labelPosition: 'beside-icon',
-        style: {
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: theme.colors.secondary,
+        tabBarInactiveTintColor: theme.colors.text,
+        tabBarLabelPosition: 'beside-icon',
+        tabBarStyle: {
+          height: 88,
           paddingVertical: Platform.OS === 'ios' ? 20 : 0,
-          height: 88
-        }
+        } 
       }}
     >
-      <Screen
+      
+      <Screen 
         name="Listagem"
         component={Dashboard}
         options={{
-          tabBarIcon: (({ size, color }) => (
-            <MaterialIcons
+          tabBarIcon: (({ size, color }) =>
+            <MaterialIcons 
               name="format-list-bulleted"
               size={size}
               color={color}
             />
-          ))
+          )
         }}
       />
 
-      <Screen
+      <Screen 
         name="Cadastrar"
         component={Register}
         options={{
-          tabBarIcon: (({ size, color }) => (
-            <MaterialIcons
+          tabBarIcon: (({ size, color }) =>
+            <MaterialIcons 
               name="attach-money"
               size={size}
               color={color}
             />
-          ))
+          )
         }}
       />
 
@@ -57,15 +59,16 @@ export function AppRoutes(){
         name="Resumo"
         component={Resume}
         options={{
-          tabBarIcon: (({ size, color }) => (
-            <MaterialIcons
-              name="pie-chart"
+          tabBarIcon: (({ size, color }) =>
+            <MaterialIcons 
+              name="pie-chart-outlined"
               size={size}
               color={color}
             />
-          ))
+          )
         }}
       />
+      
     </Navigator>
   );
 }
